@@ -30,6 +30,7 @@ def count_steps(csv_file, return_debug=False):
 
     # apply the filter to the magnitude signal
 
+    # Victor added this
     magnitude = data['mag'].to_numpy()
 
     filtered = filtfilt(b, a, magnitude)
@@ -62,11 +63,10 @@ if __name__ == "__main__":
 
     print(f"Steps detected: {steps}")
     print(f"First few peak indices: {dbg['peaks'][:30]}")
-    
-    # 2. Plot full signal with peak markers
+
+    # Victor added these
+    # Plot full signal with peak markers
     # Pass the filtered column name created in solution.py
     plot_with_peaks(dbg['df'], mag_col='mag', peaks=dbg['peaks'])
     
-    # 3. Zoom into the first 200 samples
-    zoom_plot(dbg['df'], mag_col='mag', start=0, end=200)
 
