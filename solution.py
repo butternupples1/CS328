@@ -35,11 +35,13 @@ def count_steps(csv_file, return_debug=False):
 
     filtered = filtfilt(b, a, magnitude)
 
+    data['mag_filtered'] = filtered #DA added
+
     # TODO: Apply a simple moving average to reduce noise (modify to apply different filter/parameters)
-    data['mag_smooth'] = data['mag'].rolling(window=5, center=True).mean()
+    data['mag_smooth'] = data['mag_filtered'].rolling(window= 5, center=True).mean() #DA edited
 
     # run a simple peak detector; these params are just placeholders -> feel free to change
-    peaks, props = find_peaks(data['mag_smooth'], height=3, distance=13)
+    peaks, props = find_peaks(data['mag_smooth'], prominence = 1.25, distance= 50) #DA edited
 
     step_count = len(peaks)
 
