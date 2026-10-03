@@ -21,26 +21,22 @@ def count_steps(csv_file, return_debug=False):
     # load the accelerometer file
     data = pd.read_csv(csv_file)
     
-    #TODO: The below is a basic scaffolding that you can modify/improve on based on your data.
-    
     # combine x,y,z into a single magnitude signal
     data['mag'] = np.sqrt(data['x']**2 + data['y']**2 + data['z']**2)
     SR = 50
     b, a = butter(3, [0.5/(SR/2), 4.0/(SR/2)], btype='bandpass')
 
-    # apply the filter to the magnitude signal
-
-    # Victor added this
+    # VP edited
     magnitude = data['mag'].to_numpy()
 
     filtered = filtfilt(b, a, magnitude)
 
     data['mag_filtered'] = filtered #DA added
 
-    # TODO: Apply a simple moving average to reduce noise (modify to apply different filter/parameters)
-    data['mag_smooth'] = data['mag_filtered'].rolling(window= 5, center=True).mean() #DA edited
+    # originally was mean, now utilizing median
+    data['mag_smooth'] = data['mag_filtered'].rolling(window= 5, center=True).median() #DA edited
 
-    # run a simple peak detector; these params are just placeholders -> feel free to change
+    # originally used height, now utilizes prominence
     peaks, props = find_peaks(data['mag_smooth'], prominence = 1.25, distance= 50) #DA edited
 
     step_count = len(peaks)
@@ -58,17 +54,13 @@ def count_steps(csv_file, return_debug=False):
 
 
 if __name__ == "__main__":
-    # try it on the sample file
+    # sample file we swapped out for real data
     steps, dbg = count_steps('data/Class_Data/sensor_data/accelormeter_2026-09-10_19-11-09.csv', return_debug=True)
-
-    # 20 true steps for this sample and the placement is in their hand
 
     print(f"Steps detected: {steps}")
     print(f"First few peak indices: {dbg['peaks'][:30]}")
 
-    # Victor added these
-    # Plot full signal with peak markers
-    # Pass the filtered column name created in solution.py
+    # VP edited
     plot_with_peaks(dbg['df'], mag_col='mag', peaks=dbg['peaks'])
     
 
