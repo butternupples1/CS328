@@ -37,7 +37,7 @@ def count_steps(csv_file, return_debug=False):
     data['mag_smooth'] = data['mag_filtered'].rolling(window= 5, center=True).median() #DA edited
 
     # originally used height, now utilizes prominence
-    peaks, props = find_peaks(data['mag_smooth'], prominence = 1.25, distance= 50) #DA edited
+    peaks, props = find_peaks(data['mag_smooth'], prominence = 1.5, distance= 45, width = 8) #DA edited
 
     step_count = len(peaks)
 
